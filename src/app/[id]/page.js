@@ -1,75 +1,75 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+
 import { useEffect, useState } from "react";
 
 export default function Home() {
-
+   
   const totalPages = 207;
   const visiblePages = 6;
   const [startPage, setStartPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
- const [character, setCharacter] = useState([]);
+  const [character, setCharacter] = useState([]);
+      const pages = [];
 
 
   function handleNext() {
-    if (startPage < totalPages) {
-      setStartPage(startPage + 1);
-      setStartchar(startcharacter + 4);
-      setEndChar(endCharacter + 4);
+    if (startPage <= totalPages) {
+       setStartPage(startPage + 1);
+      setCurrentPage(startPage+1)
+      console.log(startPage)
+ 
+     
     }
   }
-  function handleprev() {
-    if (startPage > 0) {
-      setStartPage(startPage - 1);
-      setStartchar(startcharacter - 4);
-      setEndChar(endCharacter - 4);
-    }
-  }
-
-  const pages = [];
-  for (let i = 0; i <= totalPages && visiblePages; i++) {
-    pages.push(startPage + i);
-  }
-
-  function handleNext() {
-    if (startPage + visiblePages - 1 < totalPages) {
-      setStartPage(startPage + 1);
-      setStartchar(startcharacter + 4);
-      setEndChar(endCharacter + 4);
-    }
-  }
-
   function handleprev() {
     if (startPage > 1) {
-      setStartPage(startPage - 1);
-      setStartchar(startcharacter - 4);
-      setEndChar(endCharacter - 4);
+         setStartPage(startPage - 1);
+      setCurrentPage(startPage - 1)
     }
   }
+  const handlePageClick = (page) => {
+    
+    if (page <= totalPages) {
+        setStartPage(page);
+      setCurrentPage(page);
+   
+  
+    } 
+    else {
+        alert("Page Exceded")
+    }
+  };
 
-
+  for (let i = 0; i < visiblePages; i++) {
+      
+    const page = startPage + i;
+       if (page <= totalPages) {
+         pages.push(page);
+         
+    }
+  }
+  console.log(pages[3])
+ 
   useEffect(() => {
     GetCharacter();
-  }, []);
+  }, [currentPage]);
 
   async function GetCharacter() {
-      console.log(currentPage);
     let charOnPage = 4;
     let char = [];
-    let startchar = (currentPage * charOnPage) - (charOnPage - 1);
-    for (let i = startchar; i <= startchar + 3; i++) {
+    let startchar = (currentPage * charOnPage) - (charOnPage-1);
+
+    for (let i=startchar; i<=startchar + 3; i++) {
       char.push(i);
-   
     }
-  
-  
-    
-    const response = await fetch(`https://rickandmortyapi.com/api/character/${char.join(",")}`);
+
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character/${char}`
+    );
     const data = await response.json();
     setCharacter(data);
-  
   }
   return (
     <div className=" flex justify-center  px-[96px] py-[32px]">
@@ -82,50 +82,56 @@ export default function Home() {
             Ricky and Morty API Slice
           </h1>
         </div>
-        <div className=" flex flex-row justify-between">
-          <button
+        <div className=" flex flex-row justify-between items-center mb-[20px]">
+          {startPage !== 1 &&  <button
+            disabled={startPage === 1}
             className="bg-black text-white px-6 py-3  rounded-[8px]"
-            onClick={handleprev}
+            onClick={() => {
+              handleprev();
+             
+            }}
           >
             Previous
-          </button>
-          {pages.map((page) => (
+          </button>} 
+          <div className="  flex max-w-fit mx-auto gap-[20px]">
+            {pages.map((page, index) => (
+               
+        
             <button
               key={page}
               onClick={() => {
-                GetCharacter();
-                setCurrentPage(page);
-                
+                handlePageClick(page);
+             
               }}
-              className="px-4 py-2 rounded bg-black text-white"
-            >
+              className={`p-3 rounded-[8px]  hover:cursor-pointer font-medium ${ index === 3 ?  ' bg-black text-white' :'text-black   bg-gray-300  }'}`}>
               {page}
             </button>
-          ))}
-
-          <button
+          ))}</div>
+          { startPage !== totalPages && <button
+            
             className="bg-black text-white px-6 py-3  rounded-[8px]"
-            onClick={handleNext}
+            onClick={() => { handleNext();  }}
           >
             Next
           </button>
-        </div>
+        }
+          </div>
 
-        <div className=" grid  grid-cols-2 gap-28px">
+        <div className=" grid  grid-cols-2 gap-[28px]">
           {character.map((char) => (
-            <Link key={char.id}  href={`/character/${char.id}`}>
+            <Link key={char.id} href={`/character/${char.id}`}>
               <div
                 key={char.id}
-                className=" flex gap-[20px] p-[16px] rounded-[8px] cursor-pointer"
+                className=" flex gap-[20px] p-[16px] w-full rounded-[8px] cursor-pointer bg-[#F3F4F6]"
               >
                 <Image
                   src={char.image}
                   alt=""
-                  className=" w-full"
+                  className="  max-w-[300px] w-full "
                   width={720}
                   height={600}
                 />
-                <div>
+                <div className="w-full">
                   <p className="font-bold text-[24px]">{char.name}</p>
                 </div>
               </div>

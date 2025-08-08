@@ -1,10 +1,12 @@
-Notes:
+Character-Slice:
 - Integrated  :
-- Added update note for api notes in local storage using sessionStrorage
-- Added alert for empty title and body
+- Adjusted UI
+- Adjusted pagination
+
 
 Next : 
-- Completed
+- Some Adjustement in UI 
+- Logic remaining for pagination
 
-Loom : (https://www.loom.com/share/59f6103d98394f5dae02c337eca7b620?sid=01b13b6d-7bc0-4788-b3e4-1b926d210391)
-Preview : (https://notes-nine-xi.vercel.app/)
+Loom : (https://www.loom.com/share/b33aaa03d94a41a18f89d4d9b858d229?sid=009a9e81-18ce-4da5-8fa8-f85cfa257b03)
+Preview : (https://character-slice.vercel.app/)
